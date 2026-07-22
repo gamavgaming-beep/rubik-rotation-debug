@@ -1,1 +1,113 @@
-1
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0">
+
+    <title>Rubik Rotation Debug</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+<body>
+
+    <!-- ========================= -->
+    <!-- Loading Screen -->
+    <!-- ========================= -->
+
+    <div id="loading-screen">
+
+        <div class="loader"></div>
+
+        <h1>Rubik Rotation Debug</h1>
+
+        <p>Initializing 3D Engine...</p>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- Main App -->
+    <!-- ========================= -->
+
+    <div id="app">
+
+        <!-- ===================== -->
+        <!-- Header -->
+        <!-- ===================== -->
+
+        <header id="header">
+
+            <div class="logo">
+
+                <h1>Rubik Rotation Debug</h1>
+
+                <span>Professional Camera Engine</span>
+
+            </div>
+
+        </header>
+
+        <!-- ===================== -->
+        <!-- Main Content -->
+        <!-- ===================== -->
+
+        <main id="main-content">
+
+            <!-- 3D View -->
+
+            <section id="viewer-section">
+
+                <div id="cube-container">
+
+                    <canvas id="cube-canvas"></canvas>
+
+                </div>
+
+            </section>
+
+            <!-- Debug Panel -->
+
+            <section id="debug-panel">
+
+                <!-- Current Face -->
+
+                <div class="debug-card">
+
+                    <h2>Current Face</h2>
+
+                    <h1 id="current-face">
+
+                        Front
+
+                    </h1>
+
+                </div>
+
+                <!-- Navigation -->
+
+                <div class="debug-card">
+
+                    <h2>Navigation</h2>
+
+                    <div class="button-group">
+
+                        <button id="previous-btn">
+
+                            Previous
+
+                        </button>
+
+                        <button id="next-btn">
+
+                            Next
+
+                        </button>
+
+                    </div>
+
+                </div>

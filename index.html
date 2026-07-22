@@ -111,3 +111,186 @@
                     </div>
 
                 </div>
+                
+                                <!-- Quaternion -->
+
+                <div class="debug-card">
+
+                    <h2>Quaternion</h2>
+
+                    <div class="value-row">
+
+                        <span>X</span>
+
+                        <span id="quat-x">0.0000</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>Y</span>
+
+                        <span id="quat-y">0.0000</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>Z</span>
+
+                        <span id="quat-z">0.0000</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>W</span>
+
+                        <span id="quat-w">1.0000</span>
+
+                    </div>
+
+                </div>
+
+                <!-- Euler -->
+
+                <div class="debug-card">
+
+                    <h2>Euler Rotation</h2>
+
+                    <div class="value-row">
+
+                        <span>X</span>
+
+                        <span id="euler-x">0°</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>Y</span>
+
+                        <span id="euler-y">0°</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>Z</span>
+
+                        <span id="euler-z">0°</span>
+
+                    </div>
+
+                </div>
+
+                <!-- Camera -->
+
+                <div class="debug-card">
+
+                    <h2>Camera Position</h2>
+
+                    <div class="value-row">
+
+                        <span>X</span>
+
+                        <span id="camera-x">0.000</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>Y</span>
+
+                        <span id="camera-y">0.000</span>
+
+                    </div>
+
+                    <div class="value-row">
+
+                        <span>Z</span>
+
+                        <span id="camera-z">8.000</span>
+
+                    </div>
+
+                </div>
+                
+                                <!-- Rotation History -->
+
+                <div class="debug-card">
+
+                    <h2>Rotation History</h2>
+
+                    <div id="history-list">
+
+                        <p>No rotations yet.</p>
+
+                    </div>
+
+                </div>
+
+                <!-- Controls -->
+
+                <div class="debug-card">
+
+                    <h2>Controls</h2>
+
+                    <div class="button-group">
+
+                        <button id="front-btn">
+                            Front
+                        </button>
+
+                        <button id="right-btn">
+                            Right
+                        </button>
+
+                        <button id="up-btn">
+                            Up
+                        </button>
+
+                    </div>
+
+                    <div class="button-group">
+
+                        <button id="back-btn">
+                            Back
+                        </button>
+
+                        <button id="left-btn">
+                            Left
+                        </button>
+
+                        <button id="down-btn">
+                            Down
+                        </button>
+
+                    </div>
+
+                    <div class="button-group">
+
+                        <button id="reset-btn">
+                            Reset Camera
+                        </button>
+
+                    </div>
+
+                </div>
+                
+                            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://unpkg.com/three@0.165.0/build/three.min.js"></script>
+
+    <!-- Project Scripts -->
+    <script src="cube.js"></script>
+    <script src="camera.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>

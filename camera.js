@@ -258,3 +258,214 @@ euler.z
 ).toFixed(1)+"°";
 
 }
+
+/* ================================= */
+/* MOVE CAMERA */
+/* ================================= */
+
+function moveToFace(index){
+
+if(isAnimating){
+
+return;
+
+}
+
+isAnimating = true;
+
+currentFace = index;
+
+camera.position.copy(
+
+facePositions[index]
+
+);
+
+lookAtCube();
+
+updateUI();
+
+historyList.innerHTML +=
+
+"<p>"+faces[index]+"</p>";
+
+historyList.scrollTop =
+
+historyList.scrollHeight;
+
+setTimeout(()=>{
+
+isAnimating = false;
+
+},200);
+
+}
+
+/* ================================= */
+/* NEXT / PREVIOUS */
+/* ================================= */
+
+function nextFace(){
+
+if(isAnimating) return;
+
+currentFace++;
+
+if(currentFace>=faces.length){
+
+currentFace=0;
+
+}
+
+moveToFace(
+
+currentFace
+
+);
+
+}
+
+function previousFace(){
+
+if(isAnimating) return;
+
+currentFace--;
+
+if(currentFace<0){
+
+currentFace=
+
+faces.length-1;
+
+}
+
+moveToFace(
+
+currentFace
+
+);
+
+}
+
+
+/* ================================= */
+/* EVENTS & INIT */
+/* ================================= */
+
+nextButton.addEventListener(
+
+"click",
+
+nextFace
+
+);
+
+previousButton.addEventListener(
+
+"click",
+
+previousFace
+
+);
+
+resetButton.addEventListener(
+
+"click",
+
+()=>{
+
+currentFace = 0;
+
+moveToFace(
+
+0
+
+);
+
+}
+
+);
+
+moveToFace(
+
+0
+
+);
+
+updateUI();
+
+/* ================================= */
+/* FACE BUTTONS */
+/* ================================= */
+
+document.getElementById(
+
+"front-btn"
+
+).addEventListener(
+
+"click",
+
+()=>moveToFace(0)
+
+);
+
+document.getElementById(
+
+"right-btn"
+
+).addEventListener(
+
+"click",
+
+()=>moveToFace(1)
+
+);
+
+document.getElementById(
+
+"up-btn"
+
+).addEventListener(
+
+"click",
+
+()=>moveToFace(2)
+
+);
+
+document.getElementById(
+
+"back-btn"
+
+).addEventListener(
+
+"click",
+
+()=>moveToFace(3)
+
+);
+
+document.getElementById(
+
+"left-btn"
+
+).addEventListener(
+
+"click",
+
+()=>moveToFace(4)
+
+);
+
+document.getElementById(
+
+"down-btn"
+
+).addEventListener(
+
+"click",
+
+()=>moveToFace(5)
+
+);

@@ -1,20 +1,9 @@
-/* ================================= */
-/* RUBIK ROTATION DEBUG */
-/* cube.js - Part 1 */
-/* ================================= */
+/* ==========================================
+   RUBIK ROTATION DEBUG
+   cube.js v2 - Part 1
+========================================== */
 
-let scene;
-let camera;
-let renderer;
-
-let cube;
-
-let ambientLight;
-let directionalLight;
-
-const cubeSize = 2;
-
-const cubeContainer =
+const container =
 document.getElementById(
 "cube-container"
 );
@@ -24,20 +13,21 @@ document.getElementById(
 "cube-canvas"
 );
 
-scene = new THREE.Scene();
+const scene =
+new THREE.Scene();
 
 scene.background =
 new THREE.Color(
 0x111827
 );
 
-camera =
+const camera =
 new THREE.PerspectiveCamera(
 
 45,
 
-cubeContainer.clientWidth /
-cubeContainer.clientHeight,
+container.clientWidth /
+container.clientHeight,
 
 0.1,
 
@@ -47,18 +37,28 @@ cubeContainer.clientHeight,
 
 camera.position.set(
 
-0,
-0,
-8
+4,
+4,
+6
 
 );
 
-renderer =
+camera.lookAt(
+
+0,
+0,
+0
+
+);
+
+const renderer =
 new THREE.WebGLRenderer({
 
-canvas:canvas,
+canvas,
 
-antialias:true
+antialias:true,
+
+alpha:false
 
 });
 
@@ -70,22 +70,25 @@ window.devicePixelRatio
 
 renderer.setSize(
 
-cubeContainer.clientWidth,
+container.clientWidth,
 
-cubeContainer.clientHeight
+container.clientHeight
 
 );
 
-/* ================================= */
-/* LIGHTS */
-/* ================================= */
+renderer.shadowMap.enabled = true;
 
-ambientLight =
+
+/* ==========================================
+   LIGHTS
+========================================== */
+
+const ambientLight =
 new THREE.AmbientLight(
 
 0xffffff,
 
-1.5
+1.2
 
 );
 
@@ -95,7 +98,32 @@ ambientLight
 
 );
 
-directionalLight =
+const hemiLight =
+new THREE.HemisphereLight(
+
+0xffffff,
+
+0x444444,
+
+1.4
+
+);
+
+hemiLight.position.set(
+
+0,
+20,
+0
+
+);
+
+scene.add(
+
+hemiLight
+
+);
+
+const dirLight =
 new THREE.DirectionalLight(
 
 0xffffff,
@@ -104,47 +132,47 @@ new THREE.DirectionalLight(
 
 );
 
-directionalLight.position.set(
+dirLight.position.set(
 
 5,
-8,
-10
+10,
+8
 
 );
+
+dirLight.castShadow = true;
 
 scene.add(
 
-directionalLight
+dirLight
 
 );
 
-/* ================================= */
-/* CUBE GEOMETRY */
-/* ================================= */
+/* ==========================================
+   RUBIK CUBE
+========================================== */
 
 const geometry =
 new THREE.BoxGeometry(
 
-cubeSize,
-
-cubeSize,
-
-cubeSize
+2,
+2,
+2
 
 );
 
 const materials = [
 
-new THREE.MeshStandardMaterial({color:0xff0000}),
-new THREE.MeshStandardMaterial({color:0xff8000}),
-new THREE.MeshStandardMaterial({color:0xffffff}),
-new THREE.MeshStandardMaterial({color:0xffff00}),
-new THREE.MeshStandardMaterial({color:0x00aa00}),
-new THREE.MeshStandardMaterial({color:0x0000ff})
+new THREE.MeshStandardMaterial({color:0xff0000}), // Right
+new THREE.MeshStandardMaterial({color:0xff8000}), // Left
+new THREE.MeshStandardMaterial({color:0xffffff}), // Top
+new THREE.MeshStandardMaterial({color:0xffff00}), // Bottom
+new THREE.MeshStandardMaterial({color:0x00aa00}), // Front
+new THREE.MeshStandardMaterial({color:0x0000ff})  // Back
 
 ];
 
-cube =
+const cube =
 new THREE.Mesh(
 
 geometry,
@@ -153,73 +181,75 @@ materials
 
 );
 
+cube.castShadow = true;
+
+cube.receiveShadow = true;
+
 scene.add(
 
 cube
 
 );
 
-/* ================================= */
-/* RESIZE */
-/* ================================= */
+/* ==========================================
+   GROUND & HELPERS
+========================================== */
 
-window.addEventListener(
+const ground =
 
-"resize",
+new THREE.Mesh(
 
-()=>{
+new THREE.PlaneGeometry(
 
-camera.aspect=
+20,
+20
 
-cubeContainer.clientWidth/
+),
 
-cubeContainer.clientHeight;
+new THREE.MeshStandardMaterial({
 
-camera.updateProjectionMatrix();
+color:0x222222
 
-renderer.setSize(
-
-cubeContainer.clientWidth,
-
-cubeContainer.clientHeight
+})
 
 );
 
-}
+ground.rotation.x =
+
+-Math.PI/2;
+
+ground.position.y =
+
+-2;
+
+ground.receiveShadow = true;
+
+scene.add(
+
+ground
 
 );
-
-/* ================================= */
-/* GRID */
-/* ================================= */
 
 const grid =
 
 new THREE.GridHelper(
 
-10,
-
-10,
-
-0x444444,
-
-0x222222
+20,
+20,
+0x555555,
+0x333333
 
 );
 
 grid.position.y =
 
--2;
+-1.99;
 
 scene.add(
 
 grid
 
 );
-
-/* ================================= */
-/* AXES */
-/* ================================= */
 
 const axes =
 
@@ -235,9 +265,39 @@ axes
 
 );
 
-/* ================================= */
-/* ANIMATION LOOP */
-/* ================================= */
+/* ==========================================
+   RESIZE
+========================================== */
+
+window.addEventListener(
+
+"resize",
+
+()=>{
+
+camera.aspect =
+
+container.clientWidth /
+
+container.clientHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(
+
+container.clientWidth,
+
+container.clientHeight
+
+);
+
+}
+
+);
+
+/* ==========================================
+   ANIMATION
+========================================== */
 
 function animate(){
 
@@ -259,9 +319,9 @@ camera
 
 animate();
 
-/* ================================= */
-/* EXPORTS */
-/* ================================= */
+/* ==========================================
+   EXPORTS
+========================================== */
 
 window.scene = scene;
 

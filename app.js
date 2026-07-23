@@ -2,11 +2,19 @@
 
 function initApp() {
   try {
-    // Step 1: Initialize Camera & Renderer
-    initThreeJS();
+    // Step 1: Initialize Camera, Lights & Renderer First
+    if (typeof initThreeJS === 'function') {
+      initThreeJS();
+    } else {
+      console.error("initThreeJS function is missing!");
+    }
 
-    // Step 2: Build 3D Rubik's Cube
-    createRubiksCube();
+    // Step 2: Build 3D Rubik's Cube Next
+    if (typeof createRubiksCube === 'function') {
+      createRubiksCube();
+    } else {
+      console.error("createRubiksCube function is missing!");
+    }
 
     // Step 3: Trigger Animation Frame Loop
     animate();
@@ -20,21 +28,25 @@ function initApp() {
 function animate() {
   requestAnimationFrame(animate);
 
+  // Safe check for smooth button transition animation handler
+  if (typeof updateCameraTransition === 'function') {
+    updateCameraTransition();
+  }
+
   // Update Orbit Controls Damping
-  if (controls) {
+  if (typeof controls !== 'undefined' && controls) {
     controls.update();
   }
 
-  // Render Frame
-  if (renderer && scene && camera) {
+  // Render Scene safely
+  if (typeof renderer !== 'undefined' && typeof scene !== 'undefined' && typeof camera !== 'undefined') {
     renderer.render(scene, camera);
   }
 }
 
-// Execute script after DOM load
+// Ensure DOM content is fully loaded before executing
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
   initApp();
 }
-

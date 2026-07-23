@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- 3D Canvas -->
+  <!-- Canvas Container -->
   <div id="canvas-container"></div>
 
   <!-- Real-time Live Camera HUD Overlay -->
@@ -61,7 +61,7 @@
     </div>
   </div>
 
-  <!-- Face Movement Navigation Control Panel -->
+  <!-- Navigation Panel -->
   <div id="controls-panel">
     <h3>🎯 Face Angle Navigation</h3>
     <div class="button-grid">
@@ -74,11 +74,11 @@
     </div>
   </div>
 
-  <!-- Three.js Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Three.js Libraries loaded BEFORE custom code -->
+  <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- Project Scripts -->
+  <!-- Project Scripts in Exact Order -->
   <script src="camera.js"></script>
   <script src="cube.js"></script>
   <script src="app.js"></script>

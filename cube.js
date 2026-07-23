@@ -1,14 +1,13 @@
 let rubiksCubeGroup = new THREE.Group();
+let targetQuaternion = new THREE.Quaternion();
+let isCubeRotating = false;
 
 function createRubiksCube() {
-  if (!scene) {
-    console.error("Scene is undefined!");
-    return;
-  }
+  if (!scene) return;
 
   rubiksCubeGroup.clear();
 
-  // Basic Materials (No Light dependencies - Guarantee rendering)
+  // Color Mapping for 6 Faces
   const materials = [
     new THREE.MeshBasicMaterial({ color: 0xb71234 }), // Right: Red
     new THREE.MeshBasicMaterial({ color: 0x0046ad }), // Left: Blue
@@ -26,7 +25,7 @@ function createRubiksCube() {
         const cubie = new THREE.Mesh(geometry, materials);
         cubie.position.set(x * 1.0, y * 1.0, z * 1.0);
 
-        // Add distinct black border frame
+        // Black edge lines
         const edges = new THREE.EdgesGeometry(geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 }));
         cubie.add(line);
@@ -37,5 +36,50 @@ function createRubiksCube() {
   }
 
   scene.add(rubiksCubeGroup);
-  console.log("3D Rubik's Cube successfully created!");
+  targetQuaternion.copy(rubiksCubeGroup.quaternion);
+}
+
+// Rotate Cube when buttons are clicked
+function rotateCubeTo(action) {
+  const rotMatrix = new THREE.Matrix4();
+
+  switch (action) {
+    case 'RESET':
+      targetQuaternion.set(0, 0, 0, 1);
+      break;
+    case 'RIGHT':
+      rotMatrix.makeRotationY(-Math.PI / 2);
+      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+      break;
+    case 'LEFT':
+      rotMatrix.makeRotationY(Math.PI / 2);
+      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+      break;
+    case 'UP':
+      rotMatrix.makeRotationX(Math.PI / 2);
+      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+      break;
+    case 'DOWN':
+      rotMatrix.makeRotationX(-Math.PI / 2);
+      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+      break;
+    case 'BACK':
+      rotMatrix.makeRotationY(Math.PI);
+      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+      break;
+  }
+  isCubeRotating = true;
+}
+
+// Smooth rotation animation loop
+function updateCubeRotation() {
+  if (isCubeRotating && rubiksCubeGroup) {
+    rubiksCubeGroup.quaternion.slerp(targetQuaternion, 0.1);
+
+    if (rubiksCubeGroup.quaternion.angleTo(targetQuaternion) < 0.001) {
+      rubiksCubeGroup.quaternion.copy(targetQuaternion);
+      isCubeRotating = false;
+    }
+    updateCameraHUD();
+  }
 }

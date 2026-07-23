@@ -15,6 +15,7 @@ function initThreeJS() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0f172a);
 
+  // Camera looking directly at the Front face
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0, 8);
 
@@ -68,7 +69,6 @@ function updateCameraHUD() {
   setTxt('orbit-azimuth', `${azimuthDeg}°`);
   setTxt('orbit-polar', `${polarDeg}°`);
 
-  // Update Cube Quaternion
   if (typeof rubiksCubeGroup !== 'undefined' && rubiksCubeGroup) {
     const quat = rubiksCubeGroup.quaternion;
     setTxt('quat-x', quat.x.toFixed(2));
@@ -76,26 +76,35 @@ function updateCameraHUD() {
     setTxt('quat-z', quat.z.toFixed(2));
     setTxt('quat-w', quat.w.toFixed(2));
 
-    // Dynamic Face Detection Matrix
-    const cameraDir = new THREE.Vector3();
-    camera.getWorldDirection(cameraDir);
+    // Vector pointing from camera towards the origin (0,0,0)
+    const cameraVector = new THREE.Vector3().subVectors(controls.target, camera.position).normalize();
 
-    let visibleFaces = [];
+    let bestMatch = null;
+    let maxDot = -Infinity;
+
     for (let [faceName, normal] of Object.entries(FACE_NORMALS)) {
-      let worldNormal = normal.clone();
-      worldNormal.applyQuaternion(rubiksCubeGroup.quaternion);
-      const dot = cameraDir.dot(worldNormal);
-      visibleFaces.push({ face: faceName, dot: dot });
+      let worldNormal = normal.clone().applyQuaternion(rubiksCubeGroup.quaternion);
+      
+      // Dot product to measure direct alignment with camera center
+      const dot = worldNormal.dot(cameraVector);
+      if (dot > maxDot) {
+        maxDot = dot;
+        bestMatch = faceName;
+      }
     }
 
-    visibleFaces.sort((a, b) => a.dot - b.dot);
+    // Determine Back Face
+    let oppositeFace = "BACK";
+    if (bestMatch === "FRONT") oppositeFace = "BACK";
+    else if (bestMatch === "BACK") oppositeFace = "FRONT";
+    else if (bestMatch === "RIGHT") oppositeFace = "LEFT";
+    else if (bestMatch === "LEFT") oppositeFace = "RIGHT";
+    else if (bestMatch === "TOP") oppositeFace = "BOTTOM";
+    else if (bestMatch === "BOTTOM") oppositeFace = "TOP";
 
-    const centerFace = visibleFaces[0].face;
-    const backFace = visibleFaces[visibleFaces.length - 1].face;
-
-    setTxt('center-face', centerFace);
-    setTxt('back-face', backFace);
-    setTxt('current-view', centerFace);
+    setTxt('center-face', bestMatch);
+    setTxt('back-face', oppositeFace);
+    setTxt('current-view', bestMatch);
   }
 }
 

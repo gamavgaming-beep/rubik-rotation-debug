@@ -1,39 +1,32 @@
 let rubiksCubeGroup = new THREE.Group();
 
-// Official Standard Rubik's Colors (Hex)
-const FACE_COLORS = [
-  0xb71234, // 0: Right - Red
-  0x0046ad, // 1: Left - Blue
-  0xffd500, // 2: Top - Yellow
-  0xffffff, // 3: Bottom - White
-  0x009b48, // 4: Front - Green
-  0xff5800  // 5: Back - Orange
-];
-
 function createRubiksCube() {
-  if (typeof scene === 'undefined') {
-    console.error("Scene missing!");
+  if (!scene) {
+    console.error("Scene is undefined!");
     return;
   }
 
   rubiksCubeGroup.clear();
 
-  const cubieSize = 0.92;
-  const spacing = 1.0;
+  // Basic Materials (No Light dependencies - Guarantee rendering)
+  const materials = [
+    new THREE.MeshBasicMaterial({ color: 0xb71234 }), // Right: Red
+    new THREE.MeshBasicMaterial({ color: 0x0046ad }), // Left: Blue
+    new THREE.MeshBasicMaterial({ color: 0xffd500 }), // Top: Yellow
+    new THREE.MeshBasicMaterial({ color: 0xffffff }), // Bottom: White
+    new THREE.MeshBasicMaterial({ color: 0x009b48 }), // Front: Green
+    new THREE.MeshBasicMaterial({ color: 0xff5800 })  // Back: Orange
+  ];
 
-  // Use MeshBasicMaterial to guarantee visibility without lighting dependency
-  const materials = FACE_COLORS.map(color => new THREE.MeshBasicMaterial({ color: color }));
+  const geometry = new THREE.BoxGeometry(0.92, 0.92, 0.92);
 
-  const geometry = new THREE.BoxGeometry(cubieSize, cubieSize, cubieSize);
-
-  // Build 3x3x3 Cube Grid
   for (let x = -1; x <= 1; x++) {
     for (let y = -1; y <= 1; y++) {
       for (let z = -1; z <= 1; z++) {
         const cubie = new THREE.Mesh(geometry, materials);
-        cubie.position.set(x * spacing, y * spacing, z * spacing);
-        
-        // Add black outline borders around each cubie
+        cubie.position.set(x * 1.0, y * 1.0, z * 1.0);
+
+        // Add distinct black border frame
         const edges = new THREE.EdgesGeometry(geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 }));
         cubie.add(line);
@@ -44,5 +37,5 @@ function createRubiksCube() {
   }
 
   scene.add(rubiksCubeGroup);
-  console.log("3D Cube Rendered Successfully!");
+  console.log("3D Rubik's Cube successfully created!");
 }

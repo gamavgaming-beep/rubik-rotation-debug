@@ -37,7 +37,8 @@ function createRubiksCube() {
   targetQuaternion.copy(rubiksCubeGroup.quaternion);
 }
 
-function rotateCubeTo(action) {
+// Global scope-kku direct-a rotate function bind panrom
+window.rotateCubeTo = function(action) {
   if (!rubiksCubeGroup) return;
 
   const rotMatrix = new THREE.Matrix4();
@@ -68,7 +69,7 @@ function rotateCubeTo(action) {
       break;
   }
   isCubeRotating = true;
-}
+};
 
 function updateCubeRotation() {
   if (isCubeRotating && rubiksCubeGroup) {

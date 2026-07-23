@@ -1,52 +1,48 @@
 let rubiksCubeGroup = new THREE.Group();
 
 // Official Standard Rubik's Colors (Hex)
-const FACE_COLORS = {
-  RIGHT:  0xb71234, // Red
-  LEFT:   0x0046ad, // Blue
-  TOP:    0xffd500, // Yellow
-  BOTTOM: 0xffffff, // White
-  FRONT:  0x009b48, // Green
-  BACK:   0xff5800  // Orange
-};
+const FACE_COLORS = [
+  0xb71234, // 0: Right - Red
+  0x0046ad, // 1: Left - Blue
+  0xffd500, // 2: Top - Yellow
+  0xffffff, // 3: Bottom - White
+  0x009b48, // 4: Front - Green
+  0xff5800  // 5: Back - Orange
+];
 
 function createRubiksCube() {
-  // Ensure scene exists before adding group
   if (typeof scene === 'undefined') {
-    console.error("Scene is not defined yet!");
+    console.error("Scene missing!");
     return;
   }
 
-  rubiksCubeGroup.clear(); // Clear previous mesh group if exists
+  rubiksCubeGroup.clear();
 
-  const cubieSize = 0.94;
+  const cubieSize = 0.92;
   const spacing = 1.0;
 
-  // Create Standard Materials for each face
-  const materials = [
-    new THREE.MeshStandardMaterial({ color: FACE_COLORS.RIGHT, roughness: 0.2, metalness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: FACE_COLORS.LEFT, roughness: 0.2, metalness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: FACE_COLORS.TOP, roughness: 0.2, metalness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: FACE_COLORS.BOTTOM, roughness: 0.2, metalness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: FACE_COLORS.FRONT, roughness: 0.2, metalness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: FACE_COLORS.BACK, roughness: 0.2, metalness: 0.1 })
-  ];
+  // Use MeshBasicMaterial to guarantee visibility without lighting dependency
+  const materials = FACE_COLORS.map(color => new THREE.MeshBasicMaterial({ color: color }));
 
   const geometry = new THREE.BoxGeometry(cubieSize, cubieSize, cubieSize);
 
-  // Loop through 3x3x3 grid coordinates
+  // Build 3x3x3 Cube Grid
   for (let x = -1; x <= 1; x++) {
     for (let y = -1; y <= 1; y++) {
       for (let z = -1; z <= 1; z++) {
         const cubie = new THREE.Mesh(geometry, materials);
         cubie.position.set(x * spacing, y * spacing, z * spacing);
-        cubie.userData = { initialX: x, initialY: y, initialZ: z };
         
+        // Add black outline borders around each cubie
+        const edges = new THREE.EdgesGeometry(geometry);
+        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 }));
+        cubie.add(line);
+
         rubiksCubeGroup.add(cubie);
       }
     }
   }
 
   scene.add(rubiksCubeGroup);
-  console.log("Rubik's Cube Mesh successfully added to Scene.");
+  console.log("3D Cube Rendered Successfully!");
 }

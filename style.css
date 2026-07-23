@@ -44,6 +44,7 @@ html, body {
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
   font-size: 11px;
+  pointer-events: none; /* Allows mouse/touch drag on the 3D cube through the HUD */
 }
 
 #camera-hud h3 {
@@ -142,25 +143,4 @@ html, body {
 .button-grid button:hover {
   background: #38bdf8;
   color: #0f172a;
-}
-
-#camera-hud {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  z-index: 10;
-  width: 280px;
-  max-height: 85vh;
-  overflow-y: auto;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #38bdf8;
-  padding: 12px;
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-  font-size: 11px;
-  
-  /* 💥 INDHA REKAI-YA ADD PANNUNGA 💥 */
-  pointer-events: none;
 }

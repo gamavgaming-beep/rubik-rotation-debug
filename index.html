@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rubik's Cube 3D Debugger</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Rubik's Cube 3D Debugger & Solver Mapper</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- 3D Canvas Element -->
+  <!-- 3D Canvas Area -->
   <div id="canvas-container"></div>
 
-  <!-- Real-time Live Camera HUD Overlay -->
+  <!-- Camera & Solver Live HUD -->
   <div id="camera-hud">
-    <h3>🎥 Camera & Cube Values</h3>
+    <h3>🎥 Camera & Solver Values</h3>
 
     <div class="hud-section highlight-view">
       <div>Current View: <span id="current-view">FRONT</span></div>
@@ -30,8 +30,9 @@
     </div>
 
     <div class="hud-section">
-      <div class="hud-title">✅ Camera Quaternion</div>
-      <div>X: <span id="quat-x">0.00</span> | Y: <span id="quat-y">0.00</span> | Z: <span id="quat-z">0.00</span> | W: <span id="quat-w">0.00</span></div>
+      <div class="hud-title">✅ Cube Quaternion (Solver Vector)</div>
+      <div>X: <span id="quat-x">0.00</span> | Y: <span id="quat-y">0.00</span></div>
+      <div>Z: <span id="quat-z">0.00</span> | W: <span id="quat-w">1.00</span></div>
     </div>
 
     <div class="hud-section">
@@ -40,11 +41,10 @@
     </div>
 
     <div class="hud-section metrics">
-      <div class="hud-title">📐 Orbit Angle & Distance Metrics</div>
-      <div>Camera Distance: <span id="orbit-dist">0.00</span></div>
+      <div class="hud-title">📐 Orbit Angle Metrics</div>
+      <div>Camera Distance: <span id="orbit-dist">8.00</span></div>
       <div>Azimuth Angle: <span id="orbit-azimuth">0.00°</span></div>
-      <div>Polar Angle: <span id="orbit-polar">0.00°</span></div>
-      <div>FOV / Zoom: <span id="camera-fov">45.00°</span></div>
+      <div>Polar Angle: <span id="orbit-polar">90.00°</span></div>
     </div>
 
     <div class="hud-section highlight">
@@ -53,20 +53,20 @@
     </div>
   </div>
 
-    <!-- Navigation Buttons Panel -->
+  <!-- Navigation Buttons Panel -->
   <div id="controls-panel">
-    <h3>🎯 Cube Rotation Controls</h3>
+    <h3>🎯 Cube Controls</h3>
     <div class="button-grid">
-      <button onclick="rotateCubeTo('RESET')">Front Center</button>
-      <button onclick="rotateCubeTo('RIGHT')">Front ➔ Right</button>
-      <button onclick="rotateCubeTo('LEFT')">Front ➔ Left</button>
-      <button onclick="rotateCubeTo('UP')">Front ➔ Up</button>
-      <button onclick="rotateCubeTo('DOWN')">Front ➔ Down</button>
-      <button onclick="rotateCubeTo('BACK')">Front ➔ Back</button>
+      <button id="btn-reset">Front Center</button>
+      <button id="btn-right">Front ➔ Right</button>
+      <button id="btn-left">Front ➔ Left</button>
+      <button id="btn-up">Front ➔ Up</button>
+      <button id="btn-down">Front ➔ Down</button>
+      <button id="btn-back">Front ➔ Back</button>
     </div>
   </div>
 
-  <!-- CDN Scripts -->
+  <!-- Library CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 

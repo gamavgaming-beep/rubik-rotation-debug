@@ -21,14 +21,21 @@ html, body {
   z-index: 1;
 }
 
-/* Glassmorphism Camera HUD UI Box */
+/* Ensure Three.js canvas fills whole screen */
+#canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Camera HUD Overlay Box */
 #camera-hud {
   position: absolute;
   top: 15px;
   left: 15px;
   z-index: 10;
-  width: 290px;
-  max-height: 95vh;
+  width: 280px;
+  max-height: 90vh;
   overflow-y: auto;
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -38,7 +45,6 @@ html, body {
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   font-size: 11px;
-  pointer-events: none;
 }
 
 #camera-hud h3 {
@@ -101,24 +107,24 @@ html, body {
   z-index: 10;
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 15px;
+  padding: 12px;
   border-radius: 12px;
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-  width: 220px;
+  width: 200px;
 }
 
 #controls-panel h3 {
   color: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .button-grid {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .button-grid button {
@@ -128,7 +134,7 @@ html, body {
   padding: 8px;
   border-radius: 6px;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -137,5 +143,4 @@ html, body {
 .button-grid button:hover {
   background: #38bdf8;
   color: #0f172a;
-  transform: translateY(-2px);
 }

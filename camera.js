@@ -1,471 +1,55 @@
-/* ================================= */
-/* CAMERA ENGINE */
-/* camera.js - Part 1 */
-/* ================================= */
-
-const faces = [
-
-"Front",
-
-"Right",
-
-"Up",
-
-"Back",
-
-"Left",
-
-"Down"
-
-];
-
-let currentFace = 0;
-
-const faceLabel =
-
-document.getElementById(
-
-"current-face"
-
-);
-
-const nextButton =
-
-document.getElementById(
-
-"next-btn"
-
-);
-
-const previousButton =
-
-document.getElementById(
-
-"previous-btn"
-
-);
-
-const resetButton =
-
-document.getElementById(
-
-"reset-btn"
-
-);
-
-const quatX =
-
-document.getElementById("quat-x");
-
-const quatY =
-
-document.getElementById("quat-y");
-
-const quatZ =
-
-document.getElementById("quat-z");
-
-const quatW =
-
-document.getElementById("quat-w");
-
-const eulerX =
-
-document.getElementById("euler-x");
-
-const eulerY =
-
-document.getElementById("euler-y");
-
-const eulerZ =
-
-document.getElementById("euler-z");
-
-/* ================================= */
-/* CAMERA VALUES */
-/* ================================= */
-
-const cameraX =
-
-document.getElementById(
-
-"camera-x"
-
-);
-
-const cameraY =
-
-document.getElementById(
-
-"camera-y"
-
-);
-
-const cameraZ =
-
-document.getElementById(
-
-"camera-z"
-
-);
-
-const historyList =
-
-document.getElementById(
-
-"history-list"
-
-);
-
-const euler =
-
-new THREE.Euler();
-
-const quaternion =
-
-new THREE.Quaternion();
-
-const radius = 8;
-
-let isAnimating = false;
-
-
-/* ================================= */
-/* FACE POSITIONS */
-/* ================================= */
-
-const facePositions = [
-
-new THREE.Vector3(
-0,
-0,
-radius
-),
-
-new THREE.Vector3(
-radius,
-0,
-0
-),
-
-new THREE.Vector3(
-0,
-radius,
-0
-),
-
-new THREE.Vector3(
-0,
-0,
--radius
-),
-
-new THREE.Vector3(
--radius,
-0,
-0
-),
-
-new THREE.Vector3(
-0,
--radius,
-0
-)
-
-];
-
-function lookAtCube(){
-
-camera.lookAt(
-
-0,
-0,
-0
-
-);
-
+// Global Three.js Scene, Camera, Renderer, Controls
+let scene, camera, renderer, controls;
+
+function initThreeJS() {
+  const container = document.getElementById('canvas-container');
+
+  // Create Scene
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a24);
+
+  // Setup Perspective Camera
+  const fov = 45;
+  const aspect = window.innerWidth / window.innerHeight;
+  camera = new THREE.PerspectiveCamera(fov, aspect, 0.1, 1000);
+  camera.position.set(6, 6, 8);
+
+  // Setup WebGL Renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+
+  // Append Renderer Canvas to DOM Container
+  container.innerHTML = '';
+  container.appendChild(renderer.domElement);
+
+  // Setup Orbit Controls
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.minDistance = 3;
+  controls.maxDistance = 20;
+
+  // Add Ambient and Directional Lighting
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+  scene.add(ambientLight);
+
+  const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  mainLight.position.set(10, 20, 15);
+  scene.add(mainLight);
+
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+  fillLight.position.set(-10, -10, -10);
+  scene.add(fillLight);
+
+  // Window Resize Listener
+  window.addEventListener('resize', onWindowResize, false);
 }
 
-
-/* ================================= */
-/* UPDATE UI */
-/* ================================= */
-
-function updateUI(){
-
-faceLabel.textContent =
-
-faces[currentFace];
-
-cameraX.textContent =
-
-camera.position.x.toFixed(3);
-
-cameraY.textContent =
-
-camera.position.y.toFixed(3);
-
-cameraZ.textContent =
-
-camera.position.z.toFixed(3);
-
-quatX.textContent =
-
-camera.quaternion.x.toFixed(4);
-
-quatY.textContent =
-
-camera.quaternion.y.toFixed(4);
-
-quatZ.textContent =
-
-camera.quaternion.z.toFixed(4);
-
-quatW.textContent =
-
-camera.quaternion.w.toFixed(4);
-
-euler.setFromQuaternion(
-
-camera.quaternion,
-
-"XYZ"
-
-);
-
-eulerX.textContent =
-
-THREE.MathUtils.radToDeg(
-
-euler.x
-
-).toFixed(1)+"°";
-
-eulerY.textContent =
-
-THREE.MathUtils.radToDeg(
-
-euler.y
-
-).toFixed(1)+"°";
-
-eulerZ.textContent =
-
-THREE.MathUtils.radToDeg(
-
-euler.z
-
-).toFixed(1)+"°";
-
+function onWindowResize() {
+  if (!camera || !renderer) return;
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
-/* ================================= */
-/* MOVE CAMERA */
-/* ================================= */
-
-function moveToFace(index){
-
-if(isAnimating){
-
-return;
-
-}
-
-isAnimating = true;
-
-currentFace = index;
-
-camera.position.copy(
-
-facePositions[index]
-
-);
-
-lookAtCube();
-
-updateUI();
-
-historyList.innerHTML +=
-
-"<p>"+faces[index]+"</p>";
-
-historyList.scrollTop =
-
-historyList.scrollHeight;
-
-setTimeout(()=>{
-
-isAnimating = false;
-
-},200);
-
-}
-
-/* ================================= */
-/* NEXT / PREVIOUS */
-/* ================================= */
-
-function nextFace(){
-
-if(isAnimating) return;
-
-currentFace++;
-
-if(currentFace>=faces.length){
-
-currentFace=0;
-
-}
-
-moveToFace(
-
-currentFace
-
-);
-
-}
-
-function previousFace(){
-
-if(isAnimating) return;
-
-currentFace--;
-
-if(currentFace<0){
-
-currentFace=
-
-faces.length-1;
-
-}
-
-moveToFace(
-
-currentFace
-
-);
-
-}
-
-
-/* ================================= */
-/* EVENTS & INIT */
-/* ================================= */
-
-nextButton.addEventListener(
-
-"click",
-
-nextFace
-
-);
-
-previousButton.addEventListener(
-
-"click",
-
-previousFace
-
-);
-
-resetButton.addEventListener(
-
-"click",
-
-()=>{
-
-currentFace = 0;
-
-moveToFace(
-
-0
-
-);
-
-}
-
-);
-
-moveToFace(
-
-0
-
-);
-
-updateUI();
-
-/* ================================= */
-/* FACE BUTTONS */
-/* ================================= */
-
-document.getElementById(
-
-"front-btn"
-
-).addEventListener(
-
-"click",
-
-()=>moveToFace(0)
-
-);
-
-document.getElementById(
-
-"right-btn"
-
-).addEventListener(
-
-"click",
-
-()=>moveToFace(1)
-
-);
-
-document.getElementById(
-
-"up-btn"
-
-).addEventListener(
-
-"click",
-
-()=>moveToFace(2)
-
-);
-
-document.getElementById(
-
-"back-btn"
-
-).addEventListener(
-
-"click",
-
-()=>moveToFace(3)
-
-);
-
-document.getElementById(
-
-"left-btn"
-
-).addEventListener(
-
-"click",
-
-()=>moveToFace(4)
-
-);
-
-document.getElementById(
-
-"down-btn"
-
-).addEventListener(
-
-"click",
-
-()=>moveToFace(5)
-
-);

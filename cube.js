@@ -38,34 +38,43 @@ function createRubiksCube() {
   targetQuaternion.copy(rubiksCubeGroup.quaternion);
 }
 
-// Fixed Target Alignments to guarantee exact face alignment in front of camera
+// Relative Rotation Based on Current Facing Center
 function rotateCubeTo(action) {
   if (!rubiksCubeGroup) return;
 
-  const euler = new THREE.Euler();
+  const rotMatrix = new THREE.Matrix4();
 
   switch (action) {
-    case 'RESET': // Front Face facing Camera
-      euler.set(0, 0, 0, 'XYZ');
+    case 'RESET': // Reset back to initial Front Center
+      targetQuaternion.set(0, 0, 0, 1);
       break;
-    case 'RIGHT': // Right Face facing Camera (Turn Y -90 deg)
-      euler.set(0, -Math.PI / 2, 0, 'XYZ');
+
+    case 'RIGHT': // Turn current view to relative Right (90 deg around Y)
+      rotMatrix.makeRotationY(-Math.PI / 2);
+      targetQuaternion.premultiply(new THREE.Quaternion().setFromRotationMatrix(rotMatrix));
       break;
-    case 'LEFT': // Left Face facing Camera (Turn Y +90 deg)
-      euler.set(0, Math.PI / 2, 0, 'XYZ');
+
+    case 'LEFT': // Turn current view to relative Left (90 deg around Y)
+      rotMatrix.makeRotationY(Math.PI / 2);
+      targetQuaternion.premultiply(new THREE.Quaternion().setFromRotationMatrix(rotMatrix));
       break;
-    case 'UP': // Up Face facing Camera (Turn X +90 deg)
-      euler.set(Math.PI / 2, 0, 0, 'XYZ');
+
+    case 'UP': // Turn current view to relative Up (90 deg around X)
+      rotMatrix.makeRotationX(Math.PI / 2);
+      targetQuaternion.premultiply(new THREE.Quaternion().setFromRotationMatrix(rotMatrix));
       break;
-    case 'DOWN': // Down Face facing Camera (Turn X -90 deg)
-      euler.set(-Math.PI / 2, 0, 0, 'XYZ');
+
+    case 'DOWN': // Turn current view to relative Down (90 deg around X)
+      rotMatrix.makeRotationX(-Math.PI / 2);
+      targetQuaternion.premultiply(new THREE.Quaternion().setFromRotationMatrix(rotMatrix));
       break;
-    case 'BACK': // Back Face facing Camera (Turn Y 180 deg)
-      euler.set(0, Math.PI, 0, 'XYZ');
+
+    case 'BACK': // Turn current view to relative Back (180 deg around Y)
+      rotMatrix.makeRotationY(Math.PI);
+      targetQuaternion.premultiply(new THREE.Quaternion().setFromRotationMatrix(rotMatrix));
       break;
   }
 
-  targetQuaternion.setFromEuler(euler);
   isCubeRotating = true;
 }
 
@@ -78,7 +87,7 @@ function updateCubeRotation() {
       isCubeRotating = false;
     }
     
-    // Live update calculation matrix during movement
+    // Recalculate HUD Center Face real-time as cube moves
     if (typeof updateCameraHUD === 'function') {
       updateCameraHUD();
     }

@@ -1,27 +1,44 @@
 function initApp() {
   try {
-    // 1. First Camera and Scene Setup
     initThreeJS();
-
-    // 2. Second Create Cube after Scene is Ready
     createRubiksCube();
-
-    // 3. Render Loop
+    attachButtonListeners();
     animate();
-
-    // 4. Initial HUD Update
     updateCameraHUD();
-
-    console.log("Rubik's Cube App Loaded Successfully!");
   } catch (e) {
-    console.error("App initialization failed:", e);
+    console.error("Initialization failed:", e);
+  }
+}
+
+// Touch & Click Event Listener for Mobile & Desktop
+function attachButtonListeners() {
+  const btnMap = {
+    'btn-reset': 'RESET',
+    'btn-right': 'RIGHT',
+    'btn-left': 'LEFT',
+    'btn-up': 'UP',
+    'btn-down': 'DOWN',
+    'btn-back': 'BACK'
+  };
+
+  for (let [id, action] of Object.entries(btnMap)) {
+    const btn = document.getElementById(id);
+    if (btn) {
+      const triggerAction = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        rotateCubeTo(action);
+      };
+      
+      // Supporting both Click and Touch End
+      btn.addEventListener('pointerdown', triggerAction);
+    }
   }
 }
 
 function animate() {
   requestAnimationFrame(animate);
 
-  // Smooth Cube Rotation
   if (typeof updateCubeRotation === 'function') {
     updateCubeRotation();
   }
@@ -35,7 +52,6 @@ function animate() {
   }
 }
 
-// Ensure execution after full DOM load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {

@@ -11,6 +11,12 @@ const FACE_COLORS = {
 };
 
 function createRubiksCube() {
+  // Ensure scene exists before adding group
+  if (typeof scene === 'undefined') {
+    console.error("Scene is not defined yet!");
+    return;
+  }
+
   rubiksCubeGroup.clear(); // Clear previous mesh group if exists
 
   const cubieSize = 0.94;
@@ -42,5 +48,5 @@ function createRubiksCube() {
   }
 
   scene.add(rubiksCubeGroup);
+  console.log("Rubik's Cube Mesh successfully added to Scene.");
 }
-

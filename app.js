@@ -1,181 +1,40 @@
-/* ================================= */
-/* APP */
-/* app.js - Part 1 */
-/* ================================= */
+// Main Execution Entry Point
 
-window.addEventListener(
+function initApp() {
+  try {
+    // Step 1: Initialize Camera & Renderer
+    initThreeJS();
 
-"load",
+    // Step 2: Build 3D Rubik's Cube
+    createRubiksCube();
 
-()=>{
+    // Step 3: Trigger Animation Frame Loop
+    animate();
 
-const loading =
-
-document.getElementById(
-
-"loading-screen"
-
-);
-
-setTimeout(
-
-()=>{
-
-loading.style.opacity =
-
-"0";
-
-loading.style.pointerEvents =
-
-"none";
-
-setTimeout(
-
-()=>{
-
-loading.style.display =
-
-"none";
-
-},
-
-500
-
-);
-
-},
-
-800
-
-);
-
-}
-);
-
-
-/* ================================= */
-/* STARTUP */
-/* ================================= */
-
-window.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
-if(
-
-typeof moveToFace ===
-
-"function"
-
-){
-
-moveToFace(
-
-0
-
-);
-
+    console.log("Rubik's Cube 3D Application initialized successfully!");
+  } catch (err) {
+    console.error("Initialization Error:", err);
+  }
 }
 
-if(
+function animate() {
+  requestAnimationFrame(animate);
 
-typeof updateUI ===
+  // Update Orbit Controls Damping
+  if (controls) {
+    controls.update();
+  }
 
-"function"
-
-){
-
-updateUI();
-
+  // Render Frame
+  if (renderer && scene && camera) {
+    renderer.render(scene, camera);
+  }
 }
 
-console.log(
-
-"Rubik Rotation Debug Ready"
-
-);
-
-}
-);
-
-/* ================================= */
-/* KEYBOARD SHORTCUTS */
-/* ================================= */
-
-document.addEventListener(
-
-"keydown",
-
-(event)=>{
-
-switch(
-
-event.key
-
-){
-
-case "ArrowRight":
-
-nextFace();
-
-break;
-
-case "ArrowLeft":
-
-previousFace();
-
-break;
-
-case "Home":
-
-moveToFace(
-
-0
-
-);
-
-break;
-
+// Execute script after DOM load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
 }
 
-}
-
-);
-
-/* ================================= */
-/* WINDOW FOCUS */
-/* ================================= */
-
-window.addEventListener(
-
-"focus",
-
-()=>{
-
-if(
-
-typeof updateUI===
-
-"function"
-
-){
-
-updateUI();
-
-}
-
-}
-
-);
-
-/* ================================= */
-/* FINISHED */
-/* ================================= */
-
-console.log(
-
-"Application Loaded Successfully"
-
-);

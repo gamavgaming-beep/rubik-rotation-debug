@@ -8,7 +8,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #111116;
+  background-color: #0f172a;
   font-family: 'Courier New', Courier, monospace;
 }
 
@@ -21,22 +21,15 @@ html, body {
   z-index: 1;
 }
 
-#canvas-container canvas {
-  width: 100vw !important;
-  height: 100vh !important;
-  display: block;
-}
-
-/* Glassmorphism Camera HUD UI Box */
 #camera-hud {
   position: absolute;
   top: 15px;
   left: 15px;
   z-index: 10;
-  width: 280px;
+  width: 300px;
   max-height: 85vh;
   overflow-y: auto;
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #38bdf8;
   padding: 12px;
@@ -44,7 +37,7 @@ html, body {
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
   font-size: 11px;
-  pointer-events: none; /* Allows mouse/touch drag on the 3D cube through the HUD */
+  pointer-events: none;
 }
 
 #camera-hud h3 {
@@ -99,19 +92,19 @@ html, body {
   color: #ffffff;
 }
 
-/* Navigation Buttons Panel */
 #controls-panel {
   position: absolute;
   bottom: 20px;
   right: 20px;
-  z-index: 10;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 12px;
   border-radius: 12px;
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-  width: 190px;
+  width: 200px;
+  pointer-events: auto;
 }
 
 #controls-panel h3 {
@@ -131,7 +124,7 @@ html, body {
   background: #0284c7;
   color: #ffffff;
   border: none;
-  padding: 8px;
+  padding: 10px;
   border-radius: 6px;
   font-family: inherit;
   font-size: 11px;
@@ -144,3 +137,4 @@ html, body {
   background: #38bdf8;
   color: #0f172a;
 }
+

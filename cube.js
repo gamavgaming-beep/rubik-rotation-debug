@@ -7,7 +7,7 @@ function createRubiksCube() {
 
   rubiksCubeGroup.clear();
 
-  // Basic Materials (Visible without Light dependency)
+  // Standard Rubik's Colors (MeshBasicMaterial works instantly without lighting dependency)
   const materials = [
     new THREE.MeshBasicMaterial({ color: 0xb71234 }), // Right: Red
     new THREE.MeshBasicMaterial({ color: 0x0046ad }), // Left: Blue
@@ -25,7 +25,7 @@ function createRubiksCube() {
         const cubie = new THREE.Mesh(geometry, materials);
         cubie.position.set(x * 1.0, y * 1.0, z * 1.0);
 
-        // Black Edge Borders
+        // Black Grid Borders
         const edges = new THREE.EdgesGeometry(geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 }));
         cubie.add(line);
@@ -39,7 +39,7 @@ function createRubiksCube() {
   targetQuaternion.copy(rubiksCubeGroup.quaternion);
 }
 
-// Button Click Handler to Rotate Cube
+// Global function triggered by HTML Buttons
 function rotateCubeTo(action) {
   if (!rubiksCubeGroup) return;
 
@@ -50,38 +50,41 @@ function rotateCubeTo(action) {
       targetQuaternion.set(0, 0, 0, 1);
       break;
     case 'RIGHT':
-      rotMatrix.makeRotationY(-Math.PI / 2);
+      rotMatrix.makeRotationY(-Math.PI / 2); // 90 Deg Right Turn
       targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
       break;
     case 'LEFT':
-      rotMatrix.makeRotationY(Math.PI / 2);
+      rotMatrix.makeRotationY(Math.PI / 2); // 90 Deg Left Turn
       targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
       break;
     case 'UP':
-      rotMatrix.makeRotationX(Math.PI / 2);
+      rotMatrix.makeRotationX(Math.PI / 2); // 90 Deg Upward Turn
       targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
       break;
     case 'DOWN':
-      rotMatrix.makeRotationX(-Math.PI / 2);
+      rotMatrix.makeRotationX(-Math.PI / 2); // 90 Deg Downward Turn
       targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
       break;
     case 'BACK':
-      rotMatrix.makeRotationY(Math.PI);
+      rotMatrix.makeRotationY(Math.PI); // 180 Deg Back Turn
       targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
       break;
   }
   isCubeRotating = true;
 }
 
-// Smooth Quaternion Interpolation
+// Interpolation Loop for Smooth Animation and Accurate Real-time HUD Updates
 function updateCubeRotation() {
   if (isCubeRotating && rubiksCubeGroup) {
-    rubiksCubeGroup.quaternion.slerp(targetQuaternion, 0.1);
+    rubiksCubeGroup.quaternion.slerp(targetQuaternion, 0.12);
 
     if (rubiksCubeGroup.quaternion.angleTo(targetQuaternion) < 0.001) {
       rubiksCubeGroup.quaternion.copy(targetQuaternion);
       isCubeRotating = false;
     }
-    updateCameraHUD();
+    // Continuously recalculate HUD center face during rotation
+    if (typeof updateCameraHUD === 'function') {
+      updateCameraHUD();
+    }
   }
 }

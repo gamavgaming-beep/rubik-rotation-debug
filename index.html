@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  <!-- 3D Canvas Element -->
   <div id="canvas-container"></div>
 
   <!-- Real-time Live Camera HUD Overlay -->
@@ -24,15 +25,26 @@
     </div>
 
     <div class="hud-section">
-      <div class="hud-title">✅ Camera Rotation</div>
+      <div class="hud-title">✅ Camera Rotation (Euler)</div>
       <div>X: <span id="rot-x">0.00</span> | Y: <span id="rot-y">0.00</span> | Z: <span id="rot-z">0.00</span></div>
     </div>
 
+    <div class="hud-section">
+      <div class="hud-title">✅ Camera Quaternion</div>
+      <div>X: <span id="quat-x">0.00</span> | Y: <span id="quat-y">0.00</span> | Z: <span id="quat-z">0.00</span> | W: <span id="quat-w">0.00</span></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-title">🎯 Camera Target (lookAt)</div>
+      <div>X: <span id="target-x">0.00</span> | Y: <span id="target-y">0.00</span> | Z: <span id="target-z">0.00</span></div>
+    </div>
+
     <div class="hud-section metrics">
-      <div class="hud-title">📐 Orbit Angle Metrics</div>
-      <div>Distance: <span id="orbit-dist">0.00</span></div>
+      <div class="hud-title">📐 Orbit Angle & Distance Metrics</div>
+      <div>Camera Distance: <span id="orbit-dist">0.00</span></div>
       <div>Azimuth Angle: <span id="orbit-azimuth">0.00°</span></div>
       <div>Polar Angle: <span id="orbit-polar">0.00°</span></div>
+      <div>FOV / Zoom: <span id="camera-fov">45.00°</span></div>
     </div>
 
     <div class="hud-section highlight">
@@ -43,21 +55,22 @@
 
   <!-- Navigation Buttons Panel -->
   <div id="controls-panel">
-    <h3>🎯 Cube Controls</h3>
+    <h3>🎯 Cube Rotation Controls</h3>
     <div class="button-grid">
-      <button onclick="rotateCubeTo('RESET')">Front Center</button>
-      <button onclick="rotateCubeTo('RIGHT')">Front ➔ Right</button>
-      <button onclick="rotateCubeTo('LEFT')">Front ➔ Left</button>
-      <button onclick="rotateCubeTo('UP')">Front ➔ Up</button>
-      <button onclick="rotateCubeTo('DOWN')">Front ➔ Down</button>
-      <button onclick="rotateCubeTo('BACK')">Front ➔ Back</button>
+      <button type="button" id="btn-reset">Front Center</button>
+      <button type="button" id="btn-right">Front ➔ Right</button>
+      <button type="button" id="btn-left">Front ➔ Left</button>
+      <button type="button" id="btn-up">Front ➔ Up</button>
+      <button type="button" id="btn-down">Front ➔ Down</button>
+      <button type="button" id="btn-back">Front ➔ Back</button>
     </div>
   </div>
 
-  <!-- Stable CDN scripts -->
+  <!-- CDN Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
+  <!-- Project Scripts -->
   <script src="camera.js"></script>
   <script src="cube.js"></script>
   <script src="app.js"></script>

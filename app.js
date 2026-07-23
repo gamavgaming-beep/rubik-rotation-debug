@@ -4,9 +4,8 @@ function initApp() {
     createRubiksCube();
     animate();
     updateCameraHUD();
-    console.log("3D Rubik's App Started Successfully!");
-  } catch (err) {
-    console.error("Initialization error:", err);
+  } catch (e) {
+    console.error("Initialization Failed:", e);
   }
 }
 
@@ -26,9 +25,9 @@ function animate() {
   }
 }
 
-// Guarantee execution when window loads
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  initApp();
+// Auto run on DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
 } else {
-  window.addEventListener('DOMContentLoaded', initApp);
+  initApp();
 }

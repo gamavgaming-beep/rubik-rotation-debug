@@ -23,17 +23,17 @@ html, body {
 
 #camera-hud {
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 10px;
+  left: 10px;
   z-index: 10;
-  width: 300px;
+  width: 290px;
   max-height: 85vh;
   overflow-y: auto;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #38bdf8;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 10px;
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
   font-size: 11px;
@@ -41,19 +41,19 @@ html, body {
 }
 
 #camera-hud h3 {
-  font-size: 13px;
+  font-size: 12px;
   color: #ffffff;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 4px;
 }
 
 .hud-section {
-  margin-bottom: 6px;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 6px;
-  border-radius: 6px;
+  margin-bottom: 5px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .hud-title {
@@ -71,7 +71,7 @@ html, body {
   border: 1px solid #38bdf8;
   background: rgba(56, 189, 248, 0.2);
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .highlight-view span {
@@ -94,47 +94,47 @@ html, body {
 
 #controls-panel {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 100;
+  bottom: 15px;
+  right: 15px;
+  z-index: 1000;
   background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 12px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 10px;
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-  width: 200px;
-  pointer-events: auto;
+  width: 190px;
+  pointer-events: auto !important;
 }
 
 #controls-panel h3 {
   color: #ffffff;
   font-size: 11px;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .button-grid {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .button-grid button {
   background: #0284c7;
   color: #ffffff;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 9px;
+  border-radius: 5px;
   font-family: inherit;
   font-size: 11px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  touch-action: manipulation;
+  user-select: none;
 }
 
-.button-grid button:hover {
+.button-grid button:active {
   background: #38bdf8;
-  color: #0f172a;
+  color: #000000;
 }
-

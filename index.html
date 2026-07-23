@@ -14,6 +14,10 @@
   <!-- Real-time Live Camera HUD Overlay -->
   <div id="camera-hud">
     <h3>🎥 Camera Values</h3>
+
+    <div class="hud-section highlight-view">
+      <div>Current View: <span id="current-view">FRONT</span></div>
+    </div>
     
     <div class="hud-section">
       <div class="hud-title">✅ Camera Position</div>
@@ -44,9 +48,29 @@
       <div>Z: <span id="target-z">0.00</span></div>
     </div>
 
+    <div class="hud-section metrics">
+      <div class="hud-title">📐 Orbit Angle Metrics</div>
+      <div>Distance: <span id="orbit-dist">0.00</span></div>
+      <div>Azimuth Angle: <span id="orbit-azimuth">0.00°</span></div>
+      <div>Polar Angle: <span id="orbit-polar">0.00°</span></div>
+    </div>
+
     <div class="hud-section highlight">
       <div>Center Face: <span id="center-face">FRONT</span></div>
       <div>Back Face: <span id="back-face">BACK</span></div>
+    </div>
+  </div>
+
+  <!-- Face Movement Navigation Control Panel -->
+  <div id="controls-panel">
+    <h3>🎯 Face Angle Navigation</h3>
+    <div class="button-grid">
+      <button onclick="moveCameraToFace('FRONT')">Front Center</button>
+      <button onclick="moveCameraToFace('RIGHT')">Front ➔ Right</button>
+      <button onclick="moveCameraToFace('LEFT')">Front ➔ Left</button>
+      <button onclick="moveCameraToFace('TOP')">Front ➔ Up</button>
+      <button onclick="moveCameraToFace('BOTTOM')">Front ➔ Down</button>
+      <button onclick="moveCameraToFace('BACK')">Front ➔ Back</button>
     </div>
   </div>
 

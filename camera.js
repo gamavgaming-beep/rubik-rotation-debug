@@ -1,6 +1,5 @@
 let scene, camera, renderer, controls;
 
-// Exact Face Normals for Rubik's Cube
 const FACE_NORMALS = {
   FRONT:  new THREE.Vector3(0, 0, 1),
   BACK:   new THREE.Vector3(0, 0, -1),
@@ -14,13 +13,12 @@ function initThreeJS() {
   const container = document.getElementById('canvas-container');
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0f172a); // Modern Dark Slate Background
+  scene.background = new THREE.Color(0x0f172a);
 
-  // Fixed Camera Setup looking directly at Cube Center
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 0, 8); 
+  camera.position.set(0, 0, 8); // Default facing Front face
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -67,8 +65,8 @@ function updateCameraHUD() {
   setTxt('target-y', target.y.toFixed(2));
   setTxt('target-z', target.z.toFixed(2));
 
-  // Orbit Distance & Angles
-  const distance = controls.getDistance();
+  // Features Added: Camera Distance & FOV
+  const distance = camera.position.distanceTo(target);
   const azimuthRad = controls.getAzimuthalAngle();
   const polarRad = controls.getPolarAngle();
 
@@ -78,8 +76,9 @@ function updateCameraHUD() {
   setTxt('orbit-dist', distance.toFixed(2));
   setTxt('orbit-azimuth', `${azimuthDeg}°`);
   setTxt('orbit-polar', `${polarDeg}°`);
+  setTxt('camera-fov', `${camera.fov.toFixed(2)}°`);
 
-  // Calculate Relative Active Face (Center & Back Face Calculation)
+  // Calculate Relative Face Direction
   const cameraDir = new THREE.Vector3();
   camera.getWorldDirection(cameraDir);
 
@@ -93,7 +92,6 @@ function updateCameraHUD() {
     visibleFaces.push({ face: faceName, dot: dot });
   }
 
-  // Sort faces based on alignment with camera view vector
   visibleFaces.sort((a, b) => a.dot - b.dot);
 
   const centerFace = visibleFaces[0].face;

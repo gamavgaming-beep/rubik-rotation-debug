@@ -37,8 +37,7 @@ function createRubiksCube() {
   targetQuaternion.copy(rubiksCubeGroup.quaternion);
 }
 
-// Global scope-kku direct-a rotate function bind panrom
-window.rotateCubeTo = function(action) {
+function rotateCubeTo(action) {
   if (!rubiksCubeGroup) return;
 
   const rotMatrix = new THREE.Matrix4();
@@ -69,11 +68,11 @@ window.rotateCubeTo = function(action) {
       break;
   }
   isCubeRotating = true;
-};
+}
 
 function updateCubeRotation() {
   if (isCubeRotating && rubiksCubeGroup) {
-    rubiksCubeGroup.quaternion.slerp(targetQuaternion, 0.15);
+    rubiksCubeGroup.quaternion.slerp(targetQuaternion, 0.2);
 
     if (rubiksCubeGroup.quaternion.angleTo(targetQuaternion) < 0.001) {
       rubiksCubeGroup.quaternion.copy(targetQuaternion);

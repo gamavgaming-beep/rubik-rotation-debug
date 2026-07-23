@@ -12,12 +12,15 @@ const FACE_NORMALS = {
 function initThreeJS() {
   const container = document.getElementById('canvas-container');
 
+  // 1. Scene Setup
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x111116);
 
+  // 2. Camera Setup (Position set to (5, 5, 7) for isometric view)
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 0, 8); // Front view camera alignment
+  camera.position.set(5, 5, 7);
 
+  // 3. Renderer Setup
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -25,6 +28,7 @@ function initThreeJS() {
   container.innerHTML = '';
   container.appendChild(renderer.domElement);
 
+  // 4. OrbitControls
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
@@ -42,26 +46,29 @@ function updateCameraHUD() {
   const quat = camera.quaternion;
   const target = controls.target;
 
-  const getEl = id => document.getElementById(id);
+  const setTxt = (id, txt) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = txt;
+  };
 
-  if (getEl('pos-x')) getEl('pos-x').innerText = pos.x.toFixed(3);
-  if (getEl('pos-y')) getEl('pos-y').innerText = pos.y.toFixed(3);
-  if (getEl('pos-z')) getEl('pos-z').innerText = pos.z.toFixed(3);
+  setTxt('pos-x', pos.x.toFixed(3));
+  setTxt('pos-y', pos.y.toFixed(3));
+  setTxt('pos-z', pos.z.toFixed(3));
 
-  if (getEl('rot-x')) getEl('rot-x').innerText = rot.x.toFixed(3);
-  if (getEl('rot-y')) getEl('rot-y').innerText = rot.y.toFixed(3);
-  if (getEl('rot-z')) getEl('rot-z').innerText = rot.z.toFixed(3);
+  setTxt('rot-x', rot.x.toFixed(3));
+  setTxt('rot-y', rot.y.toFixed(3));
+  setTxt('rot-z', rot.z.toFixed(3));
 
-  if (getEl('quat-x')) getEl('quat-x').innerText = quat.x.toFixed(3);
-  if (getEl('quat-y')) getEl('quat-y').innerText = quat.y.toFixed(3);
-  if (getEl('quat-z')) getEl('quat-z').innerText = quat.z.toFixed(3);
-  if (getEl('quat-w')) getEl('quat-w').innerText = quat.w.toFixed(3);
+  setTxt('quat-x', quat.x.toFixed(3));
+  setTxt('quat-y', quat.y.toFixed(3));
+  setTxt('quat-z', quat.z.toFixed(3));
+  setTxt('quat-w', quat.w.toFixed(3));
 
-  if (getEl('target-x')) getEl('target-x').innerText = target.x.toFixed(3);
-  if (getEl('target-y')) getEl('target-y').innerText = target.y.toFixed(3);
-  if (getEl('target-z')) getEl('target-z').innerText = target.z.toFixed(3);
+  setTxt('target-x', target.x.toFixed(3));
+  setTxt('target-y', target.y.toFixed(3));
+  setTxt('target-z', target.z.toFixed(3));
 
-  // Orbit angle calculations
+  // Calculate Distance, Azimuth & Polar Angles accurately
   const distance = controls.getDistance();
   const azimuthRad = controls.getAzimuthalAngle();
   const polarRad = controls.getPolarAngle();
@@ -69,11 +76,11 @@ function updateCameraHUD() {
   const azimuthDeg = (azimuthRad * (180 / Math.PI)).toFixed(2);
   const polarDeg = (polarRad * (180 / Math.PI)).toFixed(2);
 
-  if (getEl('orbit-dist')) getEl('orbit-dist').innerText = distance.toFixed(3);
-  if (getEl('orbit-azimuth')) getEl('orbit-azimuth').innerText = `${azimuthDeg}° (${azimuthRad.toFixed(2)} rad)`;
-  if (getEl('orbit-polar')) getEl('orbit-polar').innerText = `${polarDeg}° (${polarRad.toFixed(2)} rad)`;
+  setTxt('orbit-dist', distance.toFixed(3));
+  setTxt('orbit-azimuth', `${azimuthDeg}° (${azimuthRad.toFixed(2)} rad)`);
+  setTxt('orbit-polar', `${polarDeg}° (${polarRad.toFixed(2)} rad)`);
 
-  // Dynamic Face detection calculation relative to Camera View
+  // Detect Center Face & Back Face
   const cameraDir = new THREE.Vector3();
   camera.getWorldDirection(cameraDir);
 
@@ -90,9 +97,9 @@ function updateCameraHUD() {
   visibleFaces.sort((a, b) => a.dot - b.dot);
 
   const centerFace = visibleFaces[0].face;
-  if (getEl('center-face')) getEl('center-face').innerText = centerFace;
-  if (getEl('back-face')) getEl('back-face').innerText = visibleFaces[visibleFaces.length - 1].face;
-  if (getEl('current-view')) getEl('current-view').innerText = centerFace;
+  setTxt('center-face', centerFace);
+  setTxt('back-face', visibleFaces[visibleFaces.length - 1].face);
+  setTxt('current-view', centerFace);
 }
 
 function onWindowResize() {

@@ -8,22 +8,53 @@
 </head>
 <body>
 
-  <!-- Main Canvas Container for Three.js Rendering -->
+  <!-- 3D Canvas -->
   <div id="canvas-container"></div>
 
-  <!-- UI Overlay for Instructions -->
-  <div id="ui-overlay">
-    <h2>Rubik's Cube 3D Debugger</h2>
-    <p>Mouse Drag: Rotate View | Scroll: Zoom In/Out</p>
+  <!-- Real-time Live Camera HUD Overlay -->
+  <div id="camera-hud">
+    <h3>🎥 Camera Values</h3>
+    
+    <div class="hud-section">
+      <div class="hud-title">✅ Camera Position</div>
+      <div>X: <span id="pos-x">0.00</span></div>
+      <div>Y: <span id="pos-y">0.00</span></div>
+      <div>Z: <span id="pos-z">0.00</span></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-title">✅ Camera Rotation (Euler)</div>
+      <div>X: <span id="rot-x">0.00</span></div>
+      <div>Y: <span id="rot-y">0.00</span></div>
+      <div>Z: <span id="rot-z">0.00</span></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-title">✅ Camera Quaternion</div>
+      <div>X: <span id="quat-x">0.00</span></div>
+      <div>Y: <span id="quat-y">0.00</span></div>
+      <div>Z: <span id="quat-z">0.00</span></div>
+      <div>W: <span id="quat-w">0.00</span></div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-title">🎯 Camera Target (lookAt)</div>
+      <div>X: <span id="target-x">0.00</span></div>
+      <div>Y: <span id="target-y">0.00</span></div>
+      <div>Z: <span id="target-z">0.00</span></div>
+    </div>
+
+    <div class="hud-section highlight">
+      <div>Center Face: <span id="center-face">FRONT</span></div>
+      <div>Back Face: <span id="back-face">BACK</span></div>
+    </div>
   </div>
 
-  <!-- Three.js Core Library (CDN) -->
+  <!-- Three.js Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-  <!-- Three.js OrbitControls Helper (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- Application Modules -->
+  <!-- Project Scripts -->
   <script src="camera.js"></script>
   <script src="cube.js"></script>
   <script src="app.js"></script>

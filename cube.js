@@ -7,7 +7,7 @@ function createRubiksCube() {
 
   rubiksCubeGroup.clear();
 
-  // Color Mapping for 6 Faces
+  // Basic Materials (Visible without Light dependency)
   const materials = [
     new THREE.MeshBasicMaterial({ color: 0xb71234 }), // Right: Red
     new THREE.MeshBasicMaterial({ color: 0x0046ad }), // Left: Blue
@@ -25,7 +25,7 @@ function createRubiksCube() {
         const cubie = new THREE.Mesh(geometry, materials);
         cubie.position.set(x * 1.0, y * 1.0, z * 1.0);
 
-        // Black edge lines
+        // Black Edge Borders
         const edges = new THREE.EdgesGeometry(geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 }));
         cubie.add(line);
@@ -39,8 +39,10 @@ function createRubiksCube() {
   targetQuaternion.copy(rubiksCubeGroup.quaternion);
 }
 
-// Rotate Cube when buttons are clicked
+// Button Click Handler to Rotate Cube
 function rotateCubeTo(action) {
+  if (!rubiksCubeGroup) return;
+
   const rotMatrix = new THREE.Matrix4();
 
   switch (action) {
@@ -71,7 +73,7 @@ function rotateCubeTo(action) {
   isCubeRotating = true;
 }
 
-// Smooth rotation animation loop
+// Smooth Quaternion Interpolation
 function updateCubeRotation() {
   if (isCubeRotating && rubiksCubeGroup) {
     rubiksCubeGroup.quaternion.slerp(targetQuaternion, 0.1);

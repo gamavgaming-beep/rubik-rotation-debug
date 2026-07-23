@@ -7,13 +7,14 @@ function createRubiksCube() {
 
   rubiksCubeGroup.clear();
 
+  // Color Mapping: Right=Red, Left=Blue, Top=Yellow, Bottom=White, Front=Green, Back=Orange
   const materials = [
-    new THREE.MeshBasicMaterial({ color: 0xb71234 }), // Right: Red
-    new THREE.MeshBasicMaterial({ color: 0x0046ad }), // Left: Blue
-    new THREE.MeshBasicMaterial({ color: 0xffd500 }), // Top: Yellow
-    new THREE.MeshBasicMaterial({ color: 0xffffff }), // Bottom: White
-    new THREE.MeshBasicMaterial({ color: 0x009b48 }), // Front: Green
-    new THREE.MeshBasicMaterial({ color: 0xff5800 })  // Back: Orange
+    new THREE.MeshBasicMaterial({ color: 0xb71234 }), // Right (X+)
+    new THREE.MeshBasicMaterial({ color: 0x0046ad }), // Left (X-)
+    new THREE.MeshBasicMaterial({ color: 0xffd500 }), // Top (Y+)
+    new THREE.MeshBasicMaterial({ color: 0xffffff }), // Bottom (Y-)
+    new THREE.MeshBasicMaterial({ color: 0x009b48 }), // Front (Z+)
+    new THREE.MeshBasicMaterial({ color: 0xff5800 })  // Back (Z-)
   ];
 
   const geometry = new THREE.BoxGeometry(0.92, 0.92, 0.92);
@@ -37,36 +38,34 @@ function createRubiksCube() {
   targetQuaternion.copy(rubiksCubeGroup.quaternion);
 }
 
+// Fixed Target Alignments to guarantee exact face alignment in front of camera
 function rotateCubeTo(action) {
   if (!rubiksCubeGroup) return;
 
-  const rotMatrix = new THREE.Matrix4();
+  const euler = new THREE.Euler();
 
   switch (action) {
-    case 'RESET':
-      targetQuaternion.set(0, 0, 0, 1);
+    case 'RESET': // Front Face facing Camera
+      euler.set(0, 0, 0, 'XYZ');
       break;
-    case 'RIGHT':
-      rotMatrix.makeRotationY(-Math.PI / 2);
-      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+    case 'RIGHT': // Right Face facing Camera (Turn Y -90 deg)
+      euler.set(0, -Math.PI / 2, 0, 'XYZ');
       break;
-    case 'LEFT':
-      rotMatrix.makeRotationY(Math.PI / 2);
-      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+    case 'LEFT': // Left Face facing Camera (Turn Y +90 deg)
+      euler.set(0, Math.PI / 2, 0, 'XYZ');
       break;
-    case 'UP':
-      rotMatrix.makeRotationX(Math.PI / 2);
-      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+    case 'UP': // Up Face facing Camera (Turn X +90 deg)
+      euler.set(Math.PI / 2, 0, 0, 'XYZ');
       break;
-    case 'DOWN':
-      rotMatrix.makeRotationX(-Math.PI / 2);
-      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+    case 'DOWN': // Down Face facing Camera (Turn X -90 deg)
+      euler.set(-Math.PI / 2, 0, 0, 'XYZ');
       break;
-    case 'BACK':
-      rotMatrix.makeRotationY(Math.PI);
-      targetQuaternion.multiplyQuaternions(rotMatrix, targetQuaternion);
+    case 'BACK': // Back Face facing Camera (Turn Y 180 deg)
+      euler.set(0, Math.PI, 0, 'XYZ');
       break;
   }
+
+  targetQuaternion.setFromEuler(euler);
   isCubeRotating = true;
 }
 
@@ -78,6 +77,8 @@ function updateCubeRotation() {
       rubiksCubeGroup.quaternion.copy(targetQuaternion);
       isCubeRotating = false;
     }
+    
+    // Live update calculation matrix during movement
     if (typeof updateCameraHUD === 'function') {
       updateCameraHUD();
     }
